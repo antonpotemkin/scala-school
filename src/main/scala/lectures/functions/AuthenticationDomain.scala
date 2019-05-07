@@ -54,7 +54,7 @@ object AuthenticationData {
     LPCredentials(), LPCredentials(), LPCredentials(), LPCredentials(),
     LPCredentials(), LPCredentials(), LPCredentials(), LPCredentials(),
     LPCredentials(), LPCredentials(), LPCredentials(), LPCredentials(),
-    LPCredentials()
+    LPCredentials(), authUserCreds
   )
 
   val testUsers = List[User](
