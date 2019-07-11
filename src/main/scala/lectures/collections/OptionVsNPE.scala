@@ -52,20 +52,33 @@ case class Connection(resource: Resource) {
   private val defaultResult = "something went wrong!"
 
   //ConnectionProducer.result(this)
-  def result: String = ???
+  def result: String = Option(ConnectionProducer.result(this)) match {
+    case Some(conn) => conn
+    case _ => defaultResult
+  }
 }
 
 case class Resource(name: String)
 
 object OptionVsNPE extends App {
 
+  def getConnection(res : Resource): Option[Connection] = Option(ConnectionProducer.produce(res)) match {
+    case None => getConnection(res)
+    case value => value
+  }
+
   def businessLogic: String = try {
     // ResourceProducer
-    val result: String = ???
+    val result: String = Option(ResourceProducer.produce).map(res => {
+      getConnection(res).map(_.result).get
+    }).getOrElse(throw new ResourceException)
     println(result)
     result
   } catch {
-    case e: ResourceException => ???
+    case e: ResourceException => {
+      println("Try again with new resource")
+     businessLogic
+    }
   }
 
   businessLogic
